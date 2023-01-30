@@ -1,0 +1,176 @@
+1.      i) Write a function called kelvin_to_celsius() that takes a
+temperature in Kelvin and returns   that
+temperature in Celsius (Hint: To convert from Kelvin to Celsius you
+subtract 273.15)
+
+kelvin_to_celsius <- function(temp_k) {
+  temp_c <- temp_k - 273.15
+  return(temp_c)
+}
+n = as.integer(readline(prompt = "Enter the kelvin"))
+kelvin_to_celsius(n)
+
+
+(ii) Write suitable R code to compute the
+mean, median ,mode of the following values
+
+            c(90, 50, 70, 80, 70, 60, 20, 30,
+80, 90, 20).
+program:
+
+mean(c(90, 50, 70, 80, 70, 60, 20, 30, 80, 90, 20))
+
+median(c(90, 50, 70, 80, 70, 60, 20, 30, 80, 90, 20))
+
+x <- c(90, 50, 70, 80, 70, 60, 20, 30, 80, 90, 20)
+mode <- as.numeric(names(which.max(table(x))))
+mode
+
+
+(iii) Write R code to
+find 2nd  highest and 3rd
+Lowest value of above problem.
+
+program:
+
+x <- c(10, 25, 30, 50, 40, 20, 35)
+second_highest <- sort(unique(x), decreasing = TRUE)[2]
+third_lowest <- sort(unique(x))[3]
+print(paste("2nd highest value:", second_highest))
+print(paste("3rd lowest value:", third_lowest))
+
+2.      Explore the airquality dataset. It
+contains daily air quality measurements from New York during a period of five
+months:
+
+• Ozone: mean
+ozone concentration (ppb),
+
+• Solar.R:
+solar radiation (Langley),
+
+• Wind:
+average wind speed (mph),
+
+• Temp:
+maximum daily temperature in degrees Fahrenheit,
+
+• Month:
+numeric month (May=5, June=6, and so on),
+
+• Day:
+numeric day of the month (1-31).                                                            
+
+
+
+i. Compute the mean
+temperature(don’t use build in function)
+
+program:
+# Compute the mean temperature(don’t use build in function)
+n <- nrow(airquality)    
+temp_sum <- sum(airquality$Temp)
+mean_temp <- temp_sum/n
+mean_temp
+ii.
+Extract the first five rows from airquality.
+program:
+# Extract the first five rows from airquality.
+first_five_rows <- airquality[1:5,]
+
+iii.
+Extract all columns from airquality except
+Temp and Wind.
+program:
+# Extract all columns from airquality except Temp and Wind
+airquality[, !(names(airquality) %in% c("Temp","Wind"))]
+
+iv.
+Which was the coldest day during the period?
+program:
+# Which was the coldest day during the period?
+coldest_day <- which.min(airquality$Temp)
+airquality[coldest_day,]
+
+v.
+How many days was the wind speed greater than 17 mph?
+program:
+# How many days was the wind speed greater than 17 mph?
+windy_days <- sum(airquality$Wind > 17)
+windy_days
+
+3.     
+(i)
+Get the Summary Statistics of air quality dataset
+
+
+(ii)Melt airquality data
+set and display as a long – format data?
+
+(iii)Melt
+airquality data and specify month and day to be “ID variables”?
+
+ (iv)Cast the molten airquality data set with
+respect to month and date features
+
+ (v) Use cast function appropriately and
+compute the average of Ozone, Solar.R , Wind and temperature per month? 
+
+programs:
+#3
+library(reshape)
+t=airquality
+#i)
+summary(t)
+#ii)
+melt(t)
+#iii)
+t1=melt(t,id.vars=c("Month","Day"))
+print(head(t1))
+#iv)
+t2=cast(t1, Month + Day ~ variable)
+t2
+#v)
+t2=cast(t1,Month~Day,mean)
+t2
+
+4.(i) Find any missing
+values(na) in features and drop the missing values if its less than 10%
+else replace that with  mean of that feature.
+ 
+ (ii) Apply a linear regression algorithm
+using Least Squares Method on “Ozone” and “Solar.R”
+
+ (iii)Plot Scatter plot between Ozone and
+Solar and add regression line created by above model
+
+programs:
+#4
+library(dplyr)
+#i)
+u <-airquality
+missing_values <- colSums(is.na(u))
+for (i in 1:ncol(u)) {
+  if (missing_values[i]/nrow(u) < 0.1) {
+    u <- u[!is.na(u[,i]),]
+  } else {
+    mean_val <- mean(u[,i], na.rm = TRUE)
+    u[is.na(u[,i]),i] <- mean_val
+  }
+}
+print(u)
+#ii)
+x=u[,"Ozone"] 
+y=u[,"Solar.R"] 
+m1<- lm(x~y)
+m1 
+#iii)
+plot(x, y, main = "Air Quality",xlab = "Ozone", ylab = "Solar")
+abline(lm(x~y,u1=u),col="blue")
+
+
+
+
+
+
+
