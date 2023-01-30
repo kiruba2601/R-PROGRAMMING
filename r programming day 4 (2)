@@ -1,0 +1,147 @@
+1.(i) Write a R program to extract the five of the levels of factor created
+from a random sample from the LETTERS (Part of the base R distribution.)
+
+
+  (ii)Write R function to find the range of
+given vector. Range=Max-Min
+Sample input, C<-(9,8,7,6,5,4,3,2,1),
+ output=8
+
+ (iii)Wirte the R function to find the number
+of vowels in given string Sample input c<- “matrix”,  output<-2
+
+programs:
+
+#1 i)
+sample1=sample(LETTERS, 5)
+samplef=factor(sample1)
+fflevel=levels(samplef)[1:5]
+print(fflevel)
+
+#ii)
+e=c(1:9)
+s=max(e)
+t=min(e)
+r=s-t
+print(r)
+
+#iii)
+str1="Matrix"
+str2=strsplit(str1,"")[[1]]
+vowels=c("a","e","i","o","u","A","E","I","O","U")
+vcount=0
+for(char in str2)
+{
+  if(char %in% vowels)
+    
+  {
+    vcount=vcount + 1
+  }
+}
+print(vcount)
+
+
+2.Load
+inbuild dataset “ChickWeight” in R
+
+
+    (i) Explore the summary of Data set, like
+number of Features and its type. Fins the number of records for each features
+
+
+  (ii)Extract last 6 records of dataset
+
+
+   (iii) order the data frame, in ascending
+order by feature name  “weight”  grouped by feature “diet”
+
+
+   (iv)Perform melting function based on “Chick","Time","Diet"   features as ID
+variables
+
+
+   (v)Perform cast function to display the mean
+value of weight grouped by Diet
+
+
+programs:
+#2
+d=ChickWeight
+#i)
+str(d)
+summary(d)
+
+#ii)
+tail(d,6)
+#iii)
+library(dplyr)
+d%>%
+  group_by(Diet)%>%
+  arrange(weight)
+#iv)
+library(reshape)
+md=melt(d,id=c("Time","Chick","Diet"))
+print(head(md))
+#v)
+cas=cast(md,Diet~.,mean)
+print(cas)
+
+3.(i)Get
+the Statistical  Summary of  “ChickWeight” dataset
+(ii)Create Box plot for “weight”  grouped by “Diet”
+(iii)Create a Histogram for  “Weight” features  belong to Diet- 1 category
+(iv) Create a Histogram for  “Weight” features  belong to Diet- 4 category
+(v) Create Scatter plot  for weight vs Time grouped by Diet
+
+programs:
+
+#3i)
+da=ChickWeight
+
+summary(da)
+#ii)
+boxplot(weight ~ Diet,da=ChickWeight,main ="Weight by
+Diet",
+        xlab="Diet",ylab="Weight")
+#iii)
+diet1=d[d$Diet == 1, ]
+hist(diet1$weight, main = "Histogram of Weight in Diet-1
+Category",
+     xlab = "Weight (in grams)", ylab = "Frequency")
+#iv)
+diet2=d[d$Diet == 4, ]
+hist(diet2$weight, main = "Histogram of Weight in Diet-1
+Category",
+     xlab = "Weight (in grams)", ylab = "Frequency")
+#v)
+library(ggplot2)
+ggplot(d, aes(x = Time, y = weight, color = Diet)) +
+  geom_point() +
+  ggtitle("Weight vs Time Grouped by Diet") +
+  xlab("Time (days)") +
+  ylab("Weight (grams)")
+
+
+4.(i) Create multiregression model to find a weight of the chicken , by “Time” and “Diet” as as predictor variables
+(ii) Predict weight forTime=10 and Diet=1
+(iii)Find the error inmodel for smae
+
+programs:
+
+#4
+dat=ChickWeight
+#i)
+model=lm(weight ~ Time+factor(Diet),dat=ChickWeight)
+summary(model)
+#ii)
+ndata=data.frame(Time = 10,Diet=1)
+
+prediction=predict(model,newdata = ndata)
+prediction
+#iii)
+error=dat[dat$Time==10&dat$Diet==1,"weight"] - prediction
+error
+
+
+
+          
